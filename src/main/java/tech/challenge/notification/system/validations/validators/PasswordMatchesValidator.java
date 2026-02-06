@@ -2,7 +2,6 @@ package tech.challenge.notification.system.validations.validators;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import tech.challenge.notification.system.presentation.dtos.user.ChangePasswordDTO;
 import tech.challenge.notification.system.validations.PasswordMatches;
 
 import org.springframework.stereotype.Component;
@@ -28,11 +27,6 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
         }
 
         try {
-            // Tratamento especial para ChangePasswordDTO
-            if (obj instanceof ChangePasswordDTO dto) {
-                return dto.newPassword() != null && dto.newPassword().equals(dto.newPasswordConfirmation());
-            }
-
             // Tratamento genérico usando reflection
             Field passwordFieldObj = obj.getClass().getDeclaredField(passwordField);
             Field confirmPasswordFieldObj = obj.getClass().getDeclaredField(confirmPasswordField);

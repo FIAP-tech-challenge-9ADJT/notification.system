@@ -13,4 +13,6 @@ CREATE TABLE IF NOT EXISTS tb_user_role (
     CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES tb_role(id) ON DELETE CASCADE
 );
 
-INSERT INTO tb_role (name) VALUES ('USER');
+INSERT INTO tb_role (name) VALUES ('TEACHER');
+INSERT INTO tb_role (name) VALUES ('STUDENT');
+INSERT INTO tb_role (name) VALUES ('ADMIN');

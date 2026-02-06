@@ -15,13 +15,16 @@ public class AuthApplicationService {
     private final AuthenticateUserUseCase authenticateUserUseCase;
     private final ChangePasswordUseCase changePasswordUseCase;
     private final PasswordEncoder passwordEncoder;
+    private final UserApplicationService userApplicationService;
     
     public AuthApplicationService(AuthenticateUserUseCase authenticateUserUseCase,
                                  ChangePasswordUseCase changePasswordUseCase,
-                                 PasswordEncoder passwordEncoder) {
+                                 PasswordEncoder passwordEncoder,
+                                 UserApplicationService userApplicationService) {
         this.authenticateUserUseCase = authenticateUserUseCase;
         this.changePasswordUseCase = changePasswordUseCase;
         this.passwordEncoder = passwordEncoder;
+        this.userApplicationService = userApplicationService;
     }
     
     public User authenticate(String login, String password) {
@@ -38,5 +41,9 @@ public class AuthApplicationService {
     public void changePassword(UserId userId, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
         changePasswordUseCase.execute(userId, encodedPassword);
+    }
+    
+    public void updateUserProfile(UserId userId, String name, String email) {
+        userApplicationService.updateUser(userId, name, email);
     }
 }

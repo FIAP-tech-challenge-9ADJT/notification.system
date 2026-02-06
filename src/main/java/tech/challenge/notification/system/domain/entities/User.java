@@ -82,6 +82,10 @@ public class User {
     public boolean hasRole(Role.RoleName roleName) {
         return roles.stream().anyMatch(role -> role.getName() == roleName);
     }
+
+    public boolean isAdmin() {
+        return hasRole(Role.RoleName.ADMIN);
+    }
     
     // Getters
     public UserId getId() { return id; }

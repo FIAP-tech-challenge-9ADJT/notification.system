@@ -32,15 +32,41 @@ public class SecurityConfig {
         return http
             .authorizeHttpRequests(req -> {
 
-                // ENDPOINTS PÚBLICOS - criação de usuários
-                req.requestMatchers(HttpMethod.POST, "/users").permitAll();
+                // ENDPOINTS PÚBLICOS
                 req.requestMatchers("/auth/login", "/auth").permitAll();
                 req.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**",
                                 "/swagger-resources/**", "/webjars/**").permitAll();
 
-                // USUÁRIO
-                req.requestMatchers(HttpMethod.GET, "/users").hasAnyRole("USER", "ADMIN");
-                req.requestMatchers(HttpMethod.PUT, "/users/**").hasAnyRole("USER", "ADMIN");
+                // CRIAÇÃO DE USUÁRIOS (público)
+                req.requestMatchers(HttpMethod.POST, "/teacher").permitAll();
+                req.requestMatchers(HttpMethod.POST, "/admin").permitAll();
+                req.requestMatchers(HttpMethod.POST, "/student").permitAll();
+
+                // AUTH - atualizar perfil (requer autenticação)
+                req.requestMatchers(HttpMethod.POST, "/auth/update-profile").hasAnyRole("TEACHER", "STUDENT", "ADMIN");
+
+                // TEACHER
+                req.requestMatchers(HttpMethod.GET, "/teacher").hasAnyRole("TEACHER", "STUDENT", "ADMIN");
+                req.requestMatchers(HttpMethod.GET, "/teacher/**").hasAnyRole("TEACHER", "ADMIN");
+                req.requestMatchers(HttpMethod.DELETE, "/teacher/**").hasRole("ADMIN");
+
+                // ADMIN
+                req.requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN");
+                req.requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN");
+
+                // STUDENT
+                req.requestMatchers(HttpMethod.GET, "/student/**").hasRole("ADMIN");
+                req.requestMatchers(HttpMethod.DELETE, "/student/**").hasRole("ADMIN");
+
+                // LESSONS - regras específicas primeiro (com /feedbacks)
+                req.requestMatchers(HttpMethod.POST, "/lessons/*/feedbacks").hasAnyRole("STUDENT", "ADMIN");
+                req.requestMatchers(HttpMethod.GET, "/lessons/*/feedbacks").permitAll();
+                
+                // LESSONS - gerais
+                req.requestMatchers(HttpMethod.GET, "/lessons/*").permitAll();
+                req.requestMatchers(HttpMethod.POST, "/lessons").hasAnyRole("TEACHER", "ADMIN");
+                req.requestMatchers(HttpMethod.PUT, "/lessons/**").hasAnyRole("TEACHER", "ADMIN");
+                req.requestMatchers(HttpMethod.DELETE, "/lessons/**").hasAnyRole("TEACHER", "ADMIN");
 
                 // QUALQUER OUTRO REQUER AUTENTICAÇÃO
                 req.anyRequest().authenticated();

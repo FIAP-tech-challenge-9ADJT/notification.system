@@ -1,18 +1,20 @@
 package tech.challenge.notification.system.presentation.dtos.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import tech.challenge.notification.system.validations.PasswordMatches;
 
-@PasswordMatches(password = "newPassword", confirmPassword = "newPasswordConfirmation")
 public record ChangePasswordDTO(
-        @NotBlank(message = "A senha atual é obrigatória")
-        String currentPassword,
+        @Size(max = 100, message = "Name must have at most 100 characters")
+        String name,
 
-        @NotBlank(message = "A nova senha é obrigatória")
-        @Size(min = 6, message = "A nova senha deve ter pelo menos 6 caracteres")
-        String newPassword,
+        @Email(message = "Email must be valid")
+        String email,
 
-        @NotBlank(message = "A confirmação da nova senha é obrigatória")
-        String newPasswordConfirmation
+        @Size(min = 4, max = 50, message = "Login must have between 4 and 50 characters")
+        String login,
+
+        @NotBlank(message = "Password is required")
+        @Size(min = 6, message = "Password must have at least 6 characters")
+        String password
 ) {}
