@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.challenge.notification.system.application.services.LessonApplicationService;
 import tech.challenge.notification.system.domain.valueobjects.LessonId;
+import tech.challenge.notification.system.infrastructure.queue.FeedbackQueueService;
 import tech.challenge.notification.system.presentation.dtos.feedback.CreateFeedbackDTO;
 import tech.challenge.notification.system.presentation.dtos.feedback.FeedbackResponseDTO;
 import tech.challenge.notification.system.presentation.dtos.lesson.CreateLessonDTO;
@@ -22,9 +23,12 @@ import java.util.stream.Collectors;
 public class LessonController {
 
     private final LessonApplicationService lessonApplicationService;
+    private final FeedbackQueueService feedbackQueueService;
 
-    public LessonController(LessonApplicationService lessonApplicationService) {
+    public LessonController(LessonApplicationService lessonApplicationService,
+                            FeedbackQueueService feedbackQueueService) {
         this.lessonApplicationService = lessonApplicationService;
+        this.feedbackQueueService = feedbackQueueService;
     }
 
     @PostMapping
@@ -80,17 +84,16 @@ public class LessonController {
     }
 
     @PostMapping("/{id}/feedbacks")
-    public ResponseEntity<LessonResponseDTO> addFeedback(
+    public ResponseEntity<Void> addFeedback(
             @PathVariable Long id,
             @Valid @RequestBody CreateFeedbackDTO dto) {
 
-        var lesson = lessonApplicationService.addFeedbackToLesson(
+        feedbackQueueService.sendFeedback(
                 id,
                 dto.description(),
                 dto.score()
         );
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(LessonDtoMapper.toResponseDto(lesson));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
