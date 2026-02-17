@@ -42,10 +42,14 @@ public class AuthController {
         return ResponseEntity.ok(LoginResponseDTO.of(accessToken));
     }
 
-    @PostMapping("/change-password")
+    @PostMapping("/update-profile")
     public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordDTO dto,
             @AuthenticationPrincipal UserJpaEntity authenticatedUser) {
-    	authApplicationService.changePassword(UserId.of(authenticatedUser.getId()), dto.newPassword());
+    	UserId userId = UserId.of(authenticatedUser.getId());
+    	authApplicationService.changePassword(userId, dto.password());
+    	if (dto.name() != null || dto.email() != null) {
+    	    authApplicationService.updateUserProfile(userId, dto.name(), dto.email());
+    	}
         return ResponseEntity.noContent().build();
     }
 }

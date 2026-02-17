@@ -20,8 +20,8 @@ public class RoleJpaEntity implements GrantedAuthority {
     private Set<UserJpaEntity> users = new HashSet<>();
 
     public enum RoleName {
-        USER,
-        RESTAURANT_OWNER,
+        TEACHER,
+        STUDENT,
         ADMIN
     }
 

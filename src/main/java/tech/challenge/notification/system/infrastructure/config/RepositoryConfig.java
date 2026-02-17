@@ -18,4 +18,9 @@ public class RepositoryConfig {
     public RoleRepository roleRepository(RoleJpaRepository roleJpaRepository) {
         return new RoleRepositoryImpl(roleJpaRepository);
     }
+
+    @Bean
+    public LessonRepository lessonRepository(LessonJpaRepository lessonJpaRepository) {
+        return new LessonRepositoryImpl(lessonJpaRepository);
+    }
 }

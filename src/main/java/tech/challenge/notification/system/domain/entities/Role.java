@@ -5,7 +5,9 @@ import java.util.Objects;
 public class Role {
 
     public enum RoleName {
-    USER
+    TEACHER,
+    STUDENT,
+    ADMIN
     }
 
     private final Long id;

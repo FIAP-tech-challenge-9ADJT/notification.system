@@ -17,9 +17,6 @@ public class AuthenticateUserUseCase {
         User user = userRepository.findByLogin(Login.of(login))
             .orElseThrow(() -> new InvalidCredentialsException());
         
-        // A validação da senha será feita na camada de infraestrutura
-        // pois depende do PasswordEncoder do Spring Security
-        
         return user;
     }
 }
