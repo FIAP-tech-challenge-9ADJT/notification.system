@@ -4,6 +4,10 @@ import jakarta.validation.constraints.*;
 
 public record AvaliacaoDTO(
 
+        @NotNull(message = "ID da aula é obrigatório")
+        @Min(value = 1, message = "ID da aula deve ser maior que 0")
+        Long lessonId,
+
         @NotBlank(message = "Descrição é obrigatória")
         @Size(max = 500, message = "Descrição deve ter no máximo 500 caracteres")
         String descricao,

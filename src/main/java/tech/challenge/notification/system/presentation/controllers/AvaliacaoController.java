@@ -25,7 +25,7 @@ public class AvaliacaoController {
 
         // Enviar feedback para a fila SQS
         feedbackQueueService.sendFeedback(
-                0L, // lessonId não aplicável para avaliação geral
+                avaliacao.lessonId(),
                 avaliacao.descricao(),
                 avaliacao.nota()
         );
